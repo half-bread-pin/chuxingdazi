@@ -1,0 +1,51 @@
+# ============================================================================
+# 换行符统一规矩（2026-11-24 开源建库前立好）
+# 核心一条：文本文件在仓库内部一律按 LF（Linux/Mac 画法）存储，
+# 检出到任何系统的工作副本也保持 LF——Windows 上不再被改写成 CRLF，
+# diff 只显示真正改过的行。
+# ============================================================================
+
+* text=auto eol=lf
+
+# ---- 明确登记的文本类型（点名防 git 自动判定失误）----
+*.kt         text eol=lf
+*.kts        text eol=lf
+*.java       text eol=lf
+*.xml        text eol=lf
+*.md         text eol=lf
+*.properties text eol=lf
+*.gradle     text eol=lf
+*.pro        text eol=lf
+*.json       text eol=lf
+*.txt        text eol=lf
+*.yaml       text eol=lf
+*.yml        text eol=lf
+*.html       text eol=lf
+*.css        text eol=lf
+*.js         text eol=lf
+*.py         text eol=lf
+*.svg        text eol=lf
+
+# ---- 脚本：锁死各自平台要求的画法 ----
+# shell 脚本带 CRLF 会直接跑不起来（\r 报错），必须 LF
+*.sh         text eol=lf
+# gradlew 启动脚本没有扩展名，点名锁 LF
+gradlew      text eol=lf
+# Windows 批处理传统 CRLF
+*.bat        text eol=crlf
+
+# ---- 二进制类型：禁止任何换行符处理与按行合并 ----
+*.png        binary
+*.jpg        binary
+*.jpeg       binary
+*.webp       binary
+*.gif        binary
+*.apk        binary
+*.aar        binary
+*.jar        binary
+*.so         binary
+*.ttf        binary
+*.otf        binary
+*.zip        binary
+*.jks        binary
+*.keystore   binary

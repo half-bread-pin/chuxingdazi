@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 腾讯定位/导航官方权限清单（androidGeoCreat / quick_integrate） -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!-- E1 排查 #20（2026-11-20）：对照官方导航 SDK 快速集成页补齐缺失权限。
+         步行/骑行引擎拉起 PDR/WiFi/蓝牙扫描融合定位栈，缺扫描类权限时该栈
+         初始化不完整（崩溃前 logcat 伴生 WifiStaIfaceAidlImpl 扫描失败）；
+         驾车不依赖蓝牙/WiFi 扫描，与「同机驾车正常、non-motor 两机都崩」自洽 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <!-- Android 12+ 蓝牙扫描权限语义等价物（官方清单写的 legacy 权限） -->
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_ADMIN"
+        android:maxSdkVersion="30" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <!-- 前台导航不需要后台定位运行时授予，仅对齐官方清单声明 -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <!-- 导航 SDK（M10）：语音/算路数据缓存与前台引导 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!-- P37（2026-11-02）：API 30+ 包可见性过滤 —— 声明要检测/调起的地图 App，
+         否则 S16 里 getPackageInfo 全部返回「未下载」 -->
+    <queries>
+        <package android:name="com.baidu.BaiduMap" />
+        <package android:name="com.autonavi.minimap" />
+        <package android:name="com.tencent.map" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="baidumap" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="amapuri" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="qqmap" />
+        </intent>
+        <!-- 2026-11-16：导航 TTS 桥需要枚举本机语音引擎（系统默认引擎 init 失败时换引擎重试），
+             API 30+ 无此声明时 queryIntentServices(TTS_SERVICE) 返回空 -->
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".ChuxingdaziApp"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher_app"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Chuxingdazi">
+
+        <!--
+            🔴 决策 #114（2026-11-18）：manifest 不携带任何腾讯 key。
+            旧 meta-data TencentMapSDK 已删除（它曾是 lbssearch 回退 key 来源，
+            占位符被服务端拒 311；真实根因见决策 #114——2 参构造器 key 落 secretKey 位）。
+            key 全部运行时注入：地图 TencentMapOptions.setMapKey（MapHost）/
+            导航 NavigatorConfig.Builder.setDeveloperKey（NaviSdk.ensureInit）/
+            检索 TencentSearch 3 参构造器 apiKey 位（data/tencent 各封装 + AkConfigScreen）。
+            key 唯一来源 = 用户在 S02 填写，存 DataStore，经 TencentSdk.currentKey 分发。
+            2026-11-19 定位排查轮补充：libtencentloc 定位引擎的 key 通道 =
+            manifest meta-data（优先 TencentGeoLocationSDK，回退 TencentMapSDK，
+            反编译 db(Context) 构造实锤）或 TencentLocationManagerOptions.setKey（
+            wb 构造时覆盖，须在定位栈单例构造前调）——本应用走 setKey（TencentSdk
+            .ensureInitialized/applyKey 落地即注入 + NaviLocation 兜底）。真机实测
+            双通道下 requestLocationUpdates 仍返回 rc=2（key 不正确）而定案：
+            该 key 未在腾讯控制台启用「Android 定位SDK」产品授权（同 key 对地图/
+            导航/检索/WebService 均有效）。
+        -->
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 重启跳板：独立进程，用于 key 保存后的进程重启 -->
+        <activity
+            android:name=".PhoenixActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:process=":phoenix"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.NoDisplay" />
+
+        <!-- S12 导航中：全屏承载腾讯导航 SDK NavigatorLayerViewDrive。
+             主题必须用普通系统主题——SDK 内部 inflate 自有布局，Material3 主题会导致根视图创建失败。
+             configChanges 声明全集（原百度版实测教训）：引导页会切 uiMode/density 等，
+             缺项时返回键 finish 途中被 config change relaunch 吞掉——表现为「按返回毫无反应」 -->
+        <activity
+            android:name=".ui.navi.NavGuideActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden|mcc|mnc|locale|touchscreen|keyboard|navigation|uiMode|screenLayout|smallestScreenSize|fontScale|density|layoutDirection"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+
+        <!-- 备份文件分享（S13） -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+</manifest>

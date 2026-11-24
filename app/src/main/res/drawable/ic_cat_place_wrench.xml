@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 来源: designs/icons/place-wrench.svg -> 白色单色供地图标记叠分类色（§8.7）；由 tools_seed/svg2vd.py 生成 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M14.7 6.3a 1 1 0 0 0 0 1.4 l1.6 1.6a 1 1 0 0 0 1.4 0 l3.106-3.105c.32-.322.863-.22.983.218a 6 6 0 0 1 -8.259 7.057 l-7.91 7.91a 1 1 0 0 1 -2.999 -3 l7.91-7.91a 6 6 0 0 1 7.057 -8.259 c.438.12.54.662.219.984z"
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+    />
+</vector>

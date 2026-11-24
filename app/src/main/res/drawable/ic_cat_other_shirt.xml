@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 来源: designs/icons/other-shirt.svg -> 白色单色供地图标记叠分类色（§8.7）；由 tools_seed/svg2vd.py 生成 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M20.38 3.46 16 2a 4 4 0 0 1 -8 0 L3.62 3.46a 2 2 0 0 0 -1.34 2.23 l.58 3.47a 1 1 0 0 0 .99 .84 H6v10c0 1.1.9 2 2 2h8a 2 2 0 0 0 2 -2 V10h2.15a 1 1 0 0 0 .99 -.84 l.58-3.47a 2 2 0 0 0 -1.34 -2.23 z"
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+    />
+</vector>

@@ -1,0 +1,60 @@
+# ---- 已有：隐私 / 密钥 / 本地大目录 ----
+.mimosa
+.zcode
+designs/
+keystore/
+baidu-sdk/
+venv/
+tencent_map_sdk_key.txt
+.venv/
+*.jks
+*.keystore
+
+
+
+# ---- 个人工作文档整体不进公开仓库 ----
+docs/
+
+# ---- Gradle / 构建本地产物（别人 clone 后自己生成）----
+.gradle/
+.kotlin/
+build/
+local.properties
+hs_err_pid*.log
+
+
+# ---- 构建成品 APK ----
+/*.apk
+
+# ---- 腾讯 SDK 本地 AAR 留档（2026-11-22 依赖已切官方 maven，仅本地留档不入仓库）----
+app/libs/
+
+# ---- 根目录散落的测试截图 ----
+/*.png
+
+# ---- 本机测试工具箱（dump 脚本、测试备份 payload、验证截图、图标预览产物）----
+tools_seed/
+tmp_verify/
+diag_shots/
+
+# ---- 个人数据 / 排障档案（logcat、测试产物）----
+device_data_backup/
+ticket/
+build_test/
+build_*.log
+test_*.log
+.tmp_shots/
+*.hprof
+Thumbs.db
+Desktop.ini
+
+# ---- Android Studio / IDE 本地文件 ----
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+.DS_Store
+
+# ---- Python 缓存 ----
+__pycache__/

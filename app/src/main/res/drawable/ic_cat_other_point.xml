@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 来源: designs/icons/other-ponint.svg -> 白色单色供地图标记叠分类色（§8.7）；由 tools_seed/svg2vd.py 生成 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M20 10c0 4.993-5.539 10.193-7.399 11.799a 1 1 0 0 1 -1.202 0 C9.539 20.193 4 14.993 4 10a 8 8 0 0 1 16 0 "
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+    />
+    <path
+        android:pathData="M 9 10 a 3 3 0 1 0 6 0  a 3 3 0 1 0 -6 0  Z"
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+    />
+</vector>
